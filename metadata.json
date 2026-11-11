@@ -1,0 +1,6 @@
+{
+  "name": "MNA Realestate and Construction",
+  "description": "Premier luxury real estate developer building ultra-premium villas, gated communities, architectural penthouses, and bespoke residential estates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
