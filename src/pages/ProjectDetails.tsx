@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { MOCK_PROJECTS } from '../data/mockData';
 import Breadcrumb from '../components/layout/Breadcrumb';
 import LightboxModal from '../components/common/LightboxModal';
+import { apiClient } from '../api/client';
 import { 
   MapPin, 
   BedDouble, 
@@ -47,18 +48,33 @@ export default function ProjectDetails({ darkMode = true, onShowToast }: Project
   const [inquiryEmail, setInquiryEmail] = useState('');
   const [inquiryPhone, setInquiryPhone] = useState('');
   const [inquiryMessage, setInquiryMessage] = useState('');
+  const [inquirySubmitting, setInquirySubmitting] = useState(false);
 
-  const handleInquirySubmit = (e: FormEvent) => {
+  const handleInquirySubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!inquiryName || !inquiryEmail || !inquiryPhone) {
+    if (!inquiryName.trim() || !inquiryEmail.trim() || !inquiryPhone.trim()) {
       onShowToast('Please fill in all required contact fields.', 'info');
       return;
     }
-    onShowToast(`Thank you ${inquiryName}! An executive estate manager will call you within 15 minutes.`, 'success');
-    setInquiryName('');
-    setInquiryEmail('');
-    setInquiryPhone('');
-    setInquiryMessage('');
+    setInquirySubmitting(true);
+    try {
+      await apiClient.inquiries.submit({
+        name: inquiryName.trim(),
+        email: inquiryEmail.trim(),
+        phone: inquiryPhone.trim(),
+        interest: project.title,
+        message: inquiryMessage.trim() || `Inquiry about ${project.title}`,
+      });
+      onShowToast(`Thank you ${inquiryName}! Your inquiry was sent.`, 'success');
+      setInquiryName('');
+      setInquiryEmail('');
+      setInquiryPhone('');
+      setInquiryMessage('');
+    } catch {
+      onShowToast('We could not send your inquiry. Please try again or call our office.', 'info');
+    } finally {
+      setInquirySubmitting(false);
+    }
   };
 
   const handleDownloadBrochure = () => {
@@ -440,10 +456,11 @@ export default function ProjectDetails({ darkMode = true, onShowToast }: Project
 
                 <button
                   type="submit"
+                  disabled={inquirySubmitting}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-emerald-600 via-emerald-700 to-black hover:from-emerald-500 hover:to-zinc-900 border border-emerald-500/30 shadow-xl shadow-emerald-950/50 transition-all hover:scale-[1.02]"
                 >
                   <Send className="w-4 h-4 text-white" />
-                  <span>Submit Priority Inquiry</span>
+                  <span>{inquirySubmitting ? 'Sending…' : 'Submit Priority Inquiry'}</span>
                 </button>
               </form>
 
