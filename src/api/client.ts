@@ -4,7 +4,11 @@
  * and seamless fallback for production resilience.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || (
+  import.meta.env.PROD
+    ? 'https://mna-backend-9uni.onrender.com/api/v1'
+    : 'http://localhost:8000/api/v1'
+);
 
 export interface User {
   id: number;

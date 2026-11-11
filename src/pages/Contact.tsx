@@ -51,11 +51,7 @@ export default function Contact({ darkMode, onShowToast }: ContactProps) {
       setPhone('');
       setMessage('');
     } catch {
-      onShowToast(`Thank you ${name}! Your inquiry has been logged with our office.`, 'success');
-      setName('');
-      setEmail('');
-      setPhone('');
-      setMessage('');
+      onShowToast('We could not send your inquiry. Please try again or call our office.', 'info');
     } finally {
       setSubmitting(false);
     }

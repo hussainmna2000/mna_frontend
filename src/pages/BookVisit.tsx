@@ -16,6 +16,13 @@ import {
 } from 'lucide-react';
 import { apiClient } from '../api/client';
 
+const getLocalDateString = (date = new Date()) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 interface BookVisitProps {
   darkMode: boolean;
   onShowToast: (msg: string, type?: 'success' | 'info') => void;
@@ -23,7 +30,7 @@ interface BookVisitProps {
 
 export default function BookVisit({ darkMode, onShowToast }: BookVisitProps) {
   const [selectedProject, setSelectedProject] = useState(MOCK_PROJECTS[0].id);
-  const [visitDate, setVisitDate] = useState('2026-08-10');
+  const [visitDate, setVisitDate] = useState(() => getLocalDateString());
   const [visitTime, setVisitTime] = useState('11:00 AM');
   const [visitorName, setVisitorName] = useState('');
   const [visitorEmail, setVisitorEmail] = useState('');
@@ -53,8 +60,7 @@ export default function BookVisit({ darkMode, onShowToast }: BookVisitProps) {
       setSubmitted(true);
       onShowToast(`Site visit confirmed for ${visitorName} at ${activeProjectObj.title}!`, 'success');
     } catch {
-      setSubmitted(true);
-      onShowToast(`Site visit confirmed for ${visitorName} at ${activeProjectObj.title}!`, 'success');
+      onShowToast('We could not submit your visit request. Please try again or call our office.', 'info');
     } finally {
       setSubmitting(false);
     }
@@ -174,6 +180,7 @@ export default function BookVisit({ darkMode, onShowToast }: BookVisitProps) {
                     <input
                       type="date"
                       value={visitDate}
+                      min={getLocalDateString()}
                       onChange={(e) => setVisitDate(e.target.value)}
                       className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold border outline-none ${
                         darkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
