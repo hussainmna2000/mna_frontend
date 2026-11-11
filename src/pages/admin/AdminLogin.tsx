@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Building2, ShieldCheck, Lock, Mail, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
+import { Building2, ShieldCheck, Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
 import { apiClient } from '../../api/client';
 
 export default function AdminLogin() {
@@ -37,12 +37,6 @@ export default function AdminLogin() {
     }
   };
 
-  const handleFillDemoAdmin = () => {
-    setEmail('admin@mna-realestate.com');
-    setPassword('Admin@123');
-    setError('');
-  };
-
   return (
     <div className="min-h-screen bg-[#07090e] text-white flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden font-sans">
       {/* Background Glows */}
@@ -70,15 +64,9 @@ export default function AdminLogin() {
               <ShieldCheck className="w-4 h-4" />
               <span>Admin Authentication</span>
             </div>
-            <button
-              type="button"
-              onClick={handleFillDemoAdmin}
-              className="text-[11px] flex items-center gap-1 text-zinc-400 hover:text-emerald-400 bg-zinc-800/60 hover:bg-zinc-800 px-2.5 py-1 rounded-lg transition-colors border border-zinc-700/50"
-            >
-              <Sparkles className="w-3 h-3 text-emerald-400" />
-              <span>Auto-fill Demo</span>
-            </button>
           </div>
+
+          <p className="text-xs text-zinc-400">Sign in with the administrator credentials configured for the backend.</p>
 
           {error && (
             <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2.5">
