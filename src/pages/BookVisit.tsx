@@ -8,7 +8,6 @@ import {
   MapPin, 
   CheckCircle2, 
   ShieldCheck, 
-  Download, 
   User, 
   PhoneCall, 
   Mail, 
@@ -48,17 +47,15 @@ export default function BookVisit({ darkMode, onShowToast }: BookVisitProps) {
     }
     setSubmitting(true);
     try {
-      await apiClient.bookings.submit({
-        visitor_name: visitorName.trim(),
-        visitor_email: visitorEmail.trim(),
-        visitor_phone: visitorPhone.trim(),
-        property_id: Number(selectedProject) || 1,
-        visit_date: visitDate,
-        visit_time: visitTime,
-        notes: `Site walkthrough requested for ${activeProjectObj.title}`,
+      await apiClient.inquiries.submit({
+        name: visitorName.trim(),
+        email: visitorEmail.trim(),
+        phone: visitorPhone.trim(),
+        interest: `Site visit request: ${activeProjectObj.title}`,
+        message: `Preferred site visit: ${visitDate} at ${visitTime}. Development: ${activeProjectObj.title}.`,
       });
       setSubmitted(true);
-      onShowToast(`Site visit confirmed for ${visitorName} at ${activeProjectObj.title}!`, 'success');
+      onShowToast('Your visit request was sent. Our team will contact you to confirm a time.', 'success');
     } catch {
       onShowToast('We could not submit your visit request. Please try again or call our office.', 'info');
     } finally {
@@ -90,11 +87,11 @@ export default function BookVisit({ darkMode, onShowToast }: BookVisitProps) {
 
             <div className="space-y-2">
               <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                Visit Confirmed
+                Request Sent
               </span>
-              <h2 className="text-3xl font-serif font-bold">Your Walkthrough Pass is Ready</h2>
+              <h2 className="text-3xl font-serif font-bold">Your Visit Request Is on Its Way</h2>
               <p className="text-xs text-slate-400 max-w-md mx-auto">
-                A confirmation SMS and calendar invitation have been sent to <strong>{visitorEmail}</strong>.
+                Our team will contact <strong>{visitorEmail}</strong> to confirm the visit time.
               </p>
             </div>
 
@@ -118,16 +115,10 @@ export default function BookVisit({ darkMode, onShowToast }: BookVisitProps) {
 
             <div className="pt-4 flex flex-wrap justify-center gap-4">
               <button
-                onClick={() => onShowToast('Entry Pass PDF downloaded.', 'success')}
-                className="px-6 py-3 rounded-full font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-500 flex items-center gap-2"
-              >
-                <Download className="w-4 h-4" /> Download Entry Pass (PDF)
-              </button>
-              <button
                 onClick={() => setSubmitted(false)}
                 className="px-6 py-3 rounded-full font-bold text-xs text-slate-300 bg-slate-800 hover:bg-slate-700"
               >
-                Book Another Tour
+                Send Another Request
               </button>
             </div>
           </div>
